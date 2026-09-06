@@ -50,22 +50,27 @@ exports.kendaraanKeluar = async (req, res) => {
 // Fungsi Read All: Melihat semua data parkir
 exports.lihatSemuaParkir = async (req, res) => {
     try {
-        const dataParkir = await Parking.find();
+        // Hanya mencari data di mana isDeleted adalah false
+        const dataParkir = await Parking.find({ isDeleted: false });
         res.json(dataParkir);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-// Fungsi Delete: Menghapus data parkir berdasarkan ID
+// Fungsi Delete: Menghapus data parkir secara "Soft Deletion" (Hanya Admin)
 exports.hapusDataParkir = async (req, res) => {
     try {
         const parkir = await Parking.findById(req.params.id);
-        if (!parkir) {
-            return res.status(404).json({ message: 'Data tidak ditemukan' });
+        if (!parkir || parkir.isDeleted) {
+            return res.status(404).json({ message: 'Data tidak ditemukan atau sudah dihapus' });
         }
-        await parkir.deleteOne();
-        res.json({ message: 'Data parkir berhasil dihapus' });
+
+        parkir.isDeleted = true;
+        parkir.deletedAt = Date.now();
+        await parkir.save();
+
+        res.json({ message: 'Data parkir berhasil dipindahkan ke arsip (Soft Deleted)' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
