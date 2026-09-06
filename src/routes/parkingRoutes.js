@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const parkingController = require('../controllers/parkingController');
+const authorizeRole = require('../middleware/authorizeRole');
 
-router.post('/in', parkingController.kendaraanMasuk);
-router.put('/out/:id', parkingController.kendaraanKeluar);
-
-router.get('/', parkingController.lihatSemuaParkir);
-router.delete('/:id', parkingController.hapusDataParkir);
+router.post('/in', authorizeRole('admin', 'operator'), parkingController.kendaraanMasuk);
+router.put('/out/:id', authorizeRole('admin', 'operator'), parkingController.kendaraanKeluar);
+router.get('/', authorizeRole('admin', 'operator'), parkingController.lihatSemuaParkir);
+router.delete('/:id', authorizeRole('admin'), parkingController.hapusDataParkir);
 
 module.exports = router;
