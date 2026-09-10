@@ -6,9 +6,12 @@ import api from '../services/api';
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
+const isLoading = ref(false);
 const router = useRouter();
 
 const handleLogin = async () => {
+    isLoading.value = true;
+    errorMessage.value = '';
     try {
         const response = await api.post('/users/login', {
             email: email.value,
@@ -18,6 +21,8 @@ const handleLogin = async () => {
         router.push('/dashboard');
     } catch (error) {
         errorMessage.value = 'Email atau password salah';
+    } finally {
+        isLoading.value = false;
     }
 };
 </script>
@@ -29,15 +34,18 @@ const handleLogin = async () => {
             <form @submit.prevent="handleLogin" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">Email</label>
-                    <input v-model="email" type="email" required class="w-full border p-2 rounded" />
+                    <input v-model="email" type="email" required
+                        class="w-full border p-2 rounded focus:ring focus:ring-blue-200" />
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Password</label>
-                    <input v-model="password" type="password" required class="w-full border p-2 rounded" />
+                    <input v-model="password" type="password" required
+                        class="w-full border p-2 rounded focus:ring focus:ring-blue-200" />
                 </div>
-                <p v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</p>
-                <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
-                    Masuk
+                <p v-if="errorMessage" class="text-red-500 text-sm font-medium">{{ errorMessage }}</p>
+                <button type="submit" :disabled="isLoading"
+                    class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50 transition">
+                    {{ isLoading ? 'Memproses...' : 'Masuk' }}
                 </button>
             </form>
         </div>

@@ -1,2 +1,48 @@
+# ==========================================
+# Dependencies (Library & Modul)
+# ==========================================
 node_modules/
+/frontend-parking/node_modules/
+
+# ==========================================
+# Environment Variables (Data Sensitif)
+# ==========================================
 .env
+.env.local
+.env.*.local
+*.pem
+
+# ==========================================
+# Build Outputs (Hasil Kompilasi Frontend)
+# ==========================================
+dist/
+dist-ssr/
+/frontend-parking/dist/
+
+# ==========================================
+# Logs & Debugging
+# ==========================================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==========================================
+# OS & Editor Settings (File Bawaan Sistem)
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ==========================================
+# Testing & Coverage
+# ==========================================
+coverage/
+.nyc_output/

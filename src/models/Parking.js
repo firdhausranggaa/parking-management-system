@@ -10,4 +10,7 @@ const parkingSchema = new mongoose.Schema({
     deletedAt: { type: Date, default: null }
 });
 
+parkingSchema.index({ platNomor: 1, status: 1 });
+parkingSchema.index({ waktuMasuk: -1 });
+
 module.exports = mongoose.model('Parking', parkingSchema);
