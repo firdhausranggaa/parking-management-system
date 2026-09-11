@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../services/api';
+import Swal from 'sweetalert2';
 
 const parkingData = ref([]);
 const platNomorBaru = ref('');
@@ -54,8 +55,17 @@ const inputKendaraan = async () => {
         platNomorBaru.value = '';
         await fetchParkingData();
         if (userRole.value === 'admin') fetchStats();
+
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Kendaraan berhasil masuk',
+            showConfirmButton: false,
+            timer: 3000
+        });
     } catch (error) {
-        alert('Gagal menginput kendaraan');
+        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal menginput kendaraan' });
     } finally {
         isProcessing.value = false;
     }
@@ -67,7 +77,7 @@ const prosesKeluar = async (id) => {
         await fetchParkingData();
         if (userRole.value === 'admin') fetchStats();
     } catch (error) {
-        alert('Gagal memproses checkout');
+        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal memproses checkout' });
     }
 };
 
